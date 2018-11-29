@@ -3,10 +3,10 @@ package com.daracul.android.currencyapp;
 
 import android.os.Bundle;
 import android.util.Log;
-
-import com.daracul.android.currencyapp.model.MyResponse;
+import com.daracul.android.currencyapp.model.ValCurs;
+import com.daracul.android.currencyapp.model.Valute;
 import com.daracul.android.currencyapp.network.RestApi;
-
+import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -27,18 +27,23 @@ public class MainActivity extends AppCompatActivity {
                 .currencyObject()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<MyResponse>() {
+                .subscribe(new Consumer<ValCurs>() {
                                @Override
-                               public void accept(MyResponse myResponse) throws Exception {
-                                   Log.d(LOG_TAG,myResponse.getValCurs().getDate());
-
+                               public void accept(ValCurs valCurs) throws Exception {
+                                   List<Valute> valuteList = valCurs.getValuteList();
+                                   for (Valute valute:valuteList){
+                                       Log.d(LOG_TAG, valute.getID()+" "+valute.getValue()+" "+ valute.getName() + " " + valute.getCharCode()+ " " + valute.getNominal());
+                                   }
+                                   Log.d(LOG_TAG,valCurs.getDate());
+                                   Log.d(LOG_TAG,valCurs.getName());
                                }
                            },
                         new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
-                                Log.d(LOG_TAG, throwable.getClass().getSimpleName() +" "+ throwable.getMessage());
+                                Log.d(LOG_TAG, throwable.getClass().getSimpleName() + " " + throwable.getMessage());
                             }
                         });
     }
+
 }
