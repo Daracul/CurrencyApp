@@ -35,6 +35,7 @@ public class DataUtils {
                 break;
             case "HKD":
                 pictureId = R.drawable.hk;
+                break;
             case "DKK":
                 pictureId = R.drawable.dk;
                 break;
