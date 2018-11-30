@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.daracul.android.currencyapp.R;
 import com.daracul.android.currencyapp.currencylist.ui.adapter.CurrencyAdapter;
@@ -15,6 +16,7 @@ import com.daracul.android.currencyapp.models.dto.Valute;
 import com.daracul.android.currencyapp.network.RestApi;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,12 +34,14 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private CurrencyAdapter adapter;
+    private List<ValuteItem> valuteItemList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupUI();
+        setupUX();
         Disposable disposable = RestApi.getInstance()
                 .currency()
                 .currencyObject()
@@ -63,6 +67,16 @@ public class MainActivity extends AppCompatActivity {
                         });
     }
 
+    private void setupUX() {
+        adapter.setOnClickCurrencyListener(new CurrencyAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                swapCurrency(valuteItemList,position);
+            }
+        });
+    }
+
+
     private void setupUI() {
         findViews();
         setupRecyclerView();
@@ -85,16 +99,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleResult(List<ValuteItem> valuteItemList) {
-        float temp = valuteItemList.get(0).getValue();
-        for (int i=0;i<valuteItemList.size();i++){
-           valuteItemList.get(i).setValue(valuteItemList.get(i).getValue()/temp);
-        }
+        valuteItemList.add(0,new ValuteItem(1.0f,1,"RUB","Российский рубль"));
+        this.valuteItemList = valuteItemList;
+        swapCurrency(valuteItemList, 11);
         progressBar.setVisibility(View.GONE);
         adapter.replaceItems(valuteItemList);
         for (ValuteItem valuteItem : valuteItemList){
             Log.d(LOG_TAG, valuteItem.getName() + " "+ valuteItem.getValuteCode() + " " + valuteItem.getFlagPicture() + " " +
             valuteItem.getNominal()+" "+ valuteItem.getValue());
         }
+    }
+
+    private void swapCurrency(List<ValuteItem> valuteItemList, int position) {
+        float temp = valuteItemList.get(position).getValue();
+        for (int i=0;i<valuteItemList.size();i++){
+           valuteItemList.get(i).setValue(valuteItemList.get(i).getValue()/temp);
+        }
+        Collections.swap(valuteItemList,0,position);
+        adapter.replaceItems(valuteItemList);
+        recyclerView.scrollToPosition(0);
     }
 
 }

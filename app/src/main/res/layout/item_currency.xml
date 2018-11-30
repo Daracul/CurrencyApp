@@ -34,6 +34,8 @@
             android:layout_marginBottom="8dp"
             android:contentDescription="@null"
             android:scaleType="centerCrop"
+            android:cropToPadding="true"
+            android:background="@drawable/imageview_frame"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

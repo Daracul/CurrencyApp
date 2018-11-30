@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.daracul.android.currencyapp.R;
 import com.daracul.android.currencyapp.models.ValuteItem;
 
+import java.util.Locale;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +21,7 @@ public class CurrencyViewHolder extends RecyclerView.ViewHolder {
     private ImageView valuteFlag;
     private TextView valuteName;
     private TextView valuteValue;
+    private final View itemView;
 
     public static CurrencyViewHolder create (@NonNull ViewGroup parent){
         final View view = LayoutInflater.from(parent.getContext()).inflate(LAYOUT, parent, false);
@@ -27,6 +30,7 @@ public class CurrencyViewHolder extends RecyclerView.ViewHolder {
 
     private CurrencyViewHolder(@NonNull View itemView) {
         super(itemView);
+        this.itemView = itemView;
         findViews(itemView);
     }
 
@@ -38,12 +42,23 @@ public class CurrencyViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void bindItem (@NonNull ValuteItem valuteItem){
+    public void bindItem (@NonNull ValuteItem valuteItem, final CurrencyAdapter.OnItemClickListener currencyClickListener){
         valuteCode.setText(valuteItem.getValuteCode());
         valuteFlag.setImageResource(valuteItem.getFlagPicture());
-        String valuteWithNominal = valuteItem.getNominal()+" "+valuteItem.getName().toLowerCase();
+        String valuteWithNominal = valuteItem.getNominal()+" "+valuteItem.getName();
         valuteName.setText(valuteWithNominal);
-        valuteValue.setText(String.valueOf(valuteItem.getValue()));
+        String formattedValue = String.format(Locale.getDefault(),"%.3f",valuteItem.getValue());
+        valuteValue.setText(formattedValue);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = getAdapterPosition();
+                if (currencyClickListener!=null&&position!=RecyclerView.NO_POSITION){
+                    currencyClickListener.onItemClick(position);
+                }
+            }
+        });
 
     }
 
