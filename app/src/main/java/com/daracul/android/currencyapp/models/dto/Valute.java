@@ -1,4 +1,4 @@
-package com.daracul.android.currencyapp.model;
+package com.daracul.android.currencyapp.models.dto;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -7,44 +7,44 @@ import org.simpleframework.xml.Root;
 @Root(name = "Valute", strict = false)
 public class Valute {
     @Element(name = "Name", required = false)
-    private String Name;
+    private String name;
     @Element(name = "Value", required = false)
-    private String Value;
+    private String value;
     @Attribute(name = "ID", required = false)
-    private String ID;
+    private String id;
     @Element(name = "Nominal", required = false)
-    private String Nominal;
+    private String nominal;
     @Element(name = "CharCode", required = false)
-    private String CharCode;
+    private String charCode;
     @Element(name = "NumCode", required = false)
-    private String NumCode;
+    private String numCode;
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public String getValue() {
-        return Value;
+        return value;
     }
 
 
-    public String getID() {
-        return ID;
+    public String getId() {
+        return id;
     }
 
 
     public String getNominal() {
-        return Nominal;
+        return nominal;
     }
 
 
     public String getCharCode() {
-        return CharCode;
+        return charCode;
     }
 
 
     public String getNumCode() {
-        return NumCode;
+        return numCode;
     }
 
 
