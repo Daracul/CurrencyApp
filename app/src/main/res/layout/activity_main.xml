@@ -14,9 +14,18 @@
 
         <ProgressBar
             android:id="@+id/progress"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="@dimen/progress_bar_size"
+            android:layout_height="@dimen/progress_bar_size"
             android:layout_gravity="center" />
+        <TextView
+            android:id="@+id/empty"
+            android:layout_gravity="center"
+            android:gravity="center"
+            tools:text="Error"
+            android:visibility="gone"
+            android:layout_margin="@dimen/spacing_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"

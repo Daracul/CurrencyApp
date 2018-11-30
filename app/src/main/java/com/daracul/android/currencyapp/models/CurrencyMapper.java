@@ -1,4 +1,4 @@
-package com.daracul.android.currencyapp.currencylist.ui;
+package com.daracul.android.currencyapp.models;
 
 import com.daracul.android.currencyapp.models.DataUtils;
 import com.daracul.android.currencyapp.models.ValuteItem;

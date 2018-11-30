@@ -5,10 +5,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.daracul.android.currencyapp.R;
+import com.daracul.android.currencyapp.common.MvpAppCompatActivity;
 import com.daracul.android.currencyapp.currencylist.ui.adapter.CurrencyAdapter;
+import com.daracul.android.currencyapp.currencylist.ui.mvp.CurrencyPresenter;
+import com.daracul.android.currencyapp.currencylist.ui.mvp.CurrencyView;
 import com.daracul.android.currencyapp.models.DataUtils;
 import com.daracul.android.currencyapp.models.ValuteItem;
 import com.daracul.android.currencyapp.models.dto.ValCurs;
@@ -19,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,50 +35,51 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends MvpAppCompatActivity implements CurrencyView {
 
     private static final String LOG_TAG = "myLogs";
+    @InjectPresenter
+    CurrencyPresenter currencyPresenter;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private TextView emptyTV;
     private CurrencyAdapter adapter;
-    private List<ValuteItem> valuteItemList;
+
+    @ProvidePresenter
+    CurrencyPresenter currencyPresenter(){
+        return new CurrencyPresenter(RestApi.getInstance());
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupUI();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         setupUX();
-        Disposable disposable = RestApi.getInstance()
-                .currency()
-                .currencyObject()
-                .map(new Function<ValCurs, List<ValuteItem>>() {
-                    @Override
-                    public List<ValuteItem> apply(ValCurs valCurs) throws Exception {
-                        return CurrencyMapper.map(valCurs);
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<ValuteItem>>() {
-                               @Override
-                               public void accept(List<ValuteItem> valuteItems) throws Exception {
-                                   handleResult(valuteItems);
-                               }
-                           },
-                        new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                handleError(throwable);
-                            }
-                        });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unbindUX();
+    }
+
+    private void unbindUX() {
+        adapter.setOnClickCurrencyListener(null);
     }
 
     private void setupUX() {
         adapter.setOnClickCurrencyListener(new CurrencyAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                swapCurrency(valuteItemList,position);
+                currencyPresenter.swapCurrency(position);
             }
         });
     }
@@ -86,38 +94,31 @@ public class MainActivity extends AppCompatActivity {
         adapter = new CurrencyAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
     }
 
     private void findViews() {
         progressBar = findViewById(R.id.progress);
         recyclerView = findViewById(R.id.recycler);
+        emptyTV = findViewById(R.id.empty);
 
     }
 
-    private void handleError(Throwable throwable) {
-        Log.d(LOG_TAG, throwable.getClass().getSimpleName() + " " + throwable.getMessage());
-    }
 
-    private void handleResult(List<ValuteItem> valuteItemList) {
-        valuteItemList.add(0,new ValuteItem(1.0f,1,"RUB","Российский рубль"));
-        this.valuteItemList = valuteItemList;
-        swapCurrency(valuteItemList, 11);
+
+    @Override
+    public void showData(@NonNull List<ValuteItem> valuteItems) {
         progressBar.setVisibility(View.GONE);
-        adapter.replaceItems(valuteItemList);
-        for (ValuteItem valuteItem : valuteItemList){
-            Log.d(LOG_TAG, valuteItem.getName() + " "+ valuteItem.getValuteCode() + " " + valuteItem.getFlagPicture() + " " +
-            valuteItem.getNominal()+" "+ valuteItem.getValue());
-        }
-    }
-
-    private void swapCurrency(List<ValuteItem> valuteItemList, int position) {
-        float temp = valuteItemList.get(position).getValue();
-        for (int i=0;i<valuteItemList.size();i++){
-           valuteItemList.get(i).setValue(valuteItemList.get(i).getValue()/temp);
-        }
-        Collections.swap(valuteItemList,0,position);
-        adapter.replaceItems(valuteItemList);
+        adapter.replaceItems(valuteItems);
         recyclerView.scrollToPosition(0);
     }
 
+    @Override
+    public void showError(@NonNull Throwable throwable) {
+        Log.d(LOG_TAG, throwable.getClass().getSimpleName() + " " + throwable.getMessage());
+        progressBar.setVisibility(View.GONE);
+        emptyTV.setText(R.string.error_message);
+        emptyTV.setVisibility(View.VISIBLE);
+
+    }
 }
