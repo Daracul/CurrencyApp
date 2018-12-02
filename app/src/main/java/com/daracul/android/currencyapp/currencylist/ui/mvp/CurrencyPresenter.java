@@ -1,6 +1,5 @@
 package com.daracul.android.currencyapp.currencylist.ui.mvp;
 
-
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.daracul.android.currencyapp.models.CurrencyMapper;
@@ -27,6 +26,7 @@ public class CurrencyPresenter extends MvpPresenter<CurrencyView> {
     private RestApi restApi;
     private Disposable disposable;
     private List<ValuteItem> valuteItemList = new ArrayList<>();
+    private boolean repeat;
 
     public CurrencyPresenter(@NonNull RestApi instance) {
         this.restApi = instance;
@@ -71,17 +71,21 @@ public class CurrencyPresenter extends MvpPresenter<CurrencyView> {
 
     public void handleResult(@NonNull List<ValuteItem> valuteItemList) {
         this.valuteItemList.addAll(valuteItemList);
+        getViewState().setActionBar(ValuteItem.getDate());
         swapCurrency(USD_POSITION);
     }
 
     public void swapCurrency(int position) {
         float temp = valuteItemList.get(position).getValue();
         for (int i = 0; i < valuteItemList.size(); i++) {
-            valuteItemList.get(i).setValue(valuteItemList.get(i).getValue() / temp);
+            if (!repeat){
+                valuteItemList.get(i).setValue(1/(valuteItemList.get(i).getValue() / temp));
+            } else valuteItemList.get(i).setValue(valuteItemList.get(i).getValue() / temp);
         }
+        repeat = true;
         Collections.swap(valuteItemList, 0, position);
         getViewState().showData(valuteItemList);
-        getViewState().setActionBar(ValuteItem.getDate());
+
 
     }
 
