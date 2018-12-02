@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">CurrencyApp</string>
     <string name="error_message">Произошла ошибка при попытке загрузить данные. Проверьте свое подключение к интернету</string>
+    <string name="status_bar_text">Курсы валют на</string>
 </resources>

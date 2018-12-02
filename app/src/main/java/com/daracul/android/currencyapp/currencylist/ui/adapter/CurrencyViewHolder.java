@@ -23,7 +23,7 @@ public class CurrencyViewHolder extends RecyclerView.ViewHolder {
     private TextView valuteValue;
     private final View itemView;
 
-    public static CurrencyViewHolder create (@NonNull ViewGroup parent){
+    public static CurrencyViewHolder create(@NonNull ViewGroup parent) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(LAYOUT, parent, false);
         return new CurrencyViewHolder(view);
     }
@@ -42,19 +42,19 @@ public class CurrencyViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void bindItem (@NonNull ValuteItem valuteItem, final CurrencyAdapter.OnItemClickListener currencyClickListener){
+    public void bindItem(@NonNull ValuteItem valuteItem, final CurrencyAdapter.OnItemClickListener currencyClickListener) {
         valuteCode.setText(valuteItem.getValuteCode());
         valuteFlag.setImageResource(valuteItem.getFlagPicture());
-        String valuteWithNominal = valuteItem.getNominal()+" "+valuteItem.getName();
+        String valuteWithNominal = valuteItem.getNominal() + " " + valuteItem.getName();
         valuteName.setText(valuteWithNominal);
-        String formattedValue = String.format(Locale.getDefault(),"%.3f",valuteItem.getValue());
+        String formattedValue = String.format(Locale.getDefault(), "%.3f", valuteItem.getValue());
         valuteValue.setText(formattedValue);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int position = getAdapterPosition();
-                if (currencyClickListener!=null&&position!=RecyclerView.NO_POSITION){
+                if (currencyClickListener != null && position != RecyclerView.NO_POSITION) {
                     currencyClickListener.onItemClick(position);
                 }
             }

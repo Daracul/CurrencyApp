@@ -9,6 +9,9 @@ import androidx.annotation.NonNull;
 
 public interface CurrencyView extends MvpView {
 
-     void showData(@NonNull List<ValuteItem> valuteItems);
-     void showError(@NonNull Throwable throwable);
+    void showData(@NonNull List<ValuteItem> valuteItems);
+
+    void showError(@NonNull Throwable throwable);
+
+    void setActionBar(@NonNull String date);
 }

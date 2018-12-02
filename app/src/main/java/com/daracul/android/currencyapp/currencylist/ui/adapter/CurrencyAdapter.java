@@ -34,7 +34,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyViewHolder> {
 
     }
 
-    public void setOnClickCurrencyListener (@NonNull OnItemClickListener currencyListener){
+    public void setOnClickCurrencyListener(@NonNull OnItemClickListener currencyListener) {
         this.currencyListener = currencyListener;
     }
 
@@ -49,7 +49,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyViewHolder> {
         return items.size();
     }
 
-    public interface OnItemClickListener{
-        void onItemClick (int position);
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
 }

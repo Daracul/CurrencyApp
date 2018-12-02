@@ -6,6 +6,7 @@ public class ValuteItem {
     private String valuteCode;
     private String name;
     private int flagPicture;
+    private static String date;
 
     public ValuteItem(float value, int nominal, String valuteCode, String name) {
         this.value = value;
@@ -53,5 +54,13 @@ public class ValuteItem {
 
     public void setFlagPicture(int flagPicture) {
         this.flagPicture = flagPicture;
+    }
+
+    public static String getDate() {
+        return date;
+    }
+
+    public static void setDate(String date) {
+        ValuteItem.date = date;
     }
 }

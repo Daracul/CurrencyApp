@@ -22,7 +22,7 @@ public final class RestApi {
     private static final int TIMEOUT_IN_SECONDS = 2;
 
     private static RestApi sRestApi;
-    private final currencyEndpoint currencyEndpoint;
+    private final CurrencyEndpoint currencyEndpoint;
 
 
     public static synchronized RestApi getInstance() {
@@ -37,7 +37,7 @@ public final class RestApi {
         final Retrofit retrofit = buildRetrofitClient(buildOkHttpClient());
 
         //init endpoints here. It's can be more then one endpoint
-        currencyEndpoint = retrofit.create(currencyEndpoint.class);
+        currencyEndpoint = retrofit.create(CurrencyEndpoint.class);
     }
 
     @NonNull
@@ -76,7 +76,7 @@ public final class RestApi {
                 .build();
     }
 
-    public currencyEndpoint currency() {
+    public CurrencyEndpoint currency() {
         return currencyEndpoint;
     }
 }

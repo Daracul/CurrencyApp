@@ -4,10 +4,12 @@ package com.daracul.android.currencyapp.currencylist.ui.mvp;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.daracul.android.currencyapp.models.CurrencyMapper;
+import com.daracul.android.currencyapp.models.DataUtils;
 import com.daracul.android.currencyapp.models.ValuteItem;
 import com.daracul.android.currencyapp.models.dto.ValCurs;
 import com.daracul.android.currencyapp.network.RestApi;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,11 +24,9 @@ import io.reactivex.schedulers.Schedulers;
 public class CurrencyPresenter extends MvpPresenter<CurrencyView> {
 
     private static final int USD_POSITION = 11;
-    private static final String RUB_CODE = "RUB";
-    private static final String RUB = "Российский рубль";
     private RestApi restApi;
     private Disposable disposable;
-    private List<ValuteItem> valuteItemList;
+    private List<ValuteItem> valuteItemList = new ArrayList<>();
 
     public CurrencyPresenter(@NonNull RestApi instance) {
         this.restApi = instance;
@@ -34,12 +34,13 @@ public class CurrencyPresenter extends MvpPresenter<CurrencyView> {
 
     @Override
     protected void onFirstViewAttach() {
+        valuteItemList.add(DataUtils.createRouble());
         loadCurrencies();
     }
 
 
-    private void loadCurrencies(){
-         disposable = restApi
+    private void loadCurrencies() {
+        disposable = restApi
                 .currency()
                 .currencyObject()
                 .map(new Function<ValCurs, List<ValuteItem>>() {
@@ -68,26 +69,25 @@ public class CurrencyPresenter extends MvpPresenter<CurrencyView> {
         getViewState().showError(throwable);
     }
 
-    private void handleResult(List<ValuteItem> valuteItemList) {
-        this.valuteItemList = valuteItemList;
-        ValuteItem rouble = new ValuteItem(1.0f,1, RUB_CODE, RUB);
-        valuteItemList.add(0,rouble);
+    public void handleResult(@NonNull List<ValuteItem> valuteItemList) {
+        this.valuteItemList.addAll(valuteItemList);
         swapCurrency(USD_POSITION);
     }
 
     public void swapCurrency(int position) {
         float temp = valuteItemList.get(position).getValue();
-        for (int i=0;i<valuteItemList.size();i++){
-            valuteItemList.get(i).setValue(valuteItemList.get(i).getValue()/temp);
+        for (int i = 0; i < valuteItemList.size(); i++) {
+            valuteItemList.get(i).setValue(valuteItemList.get(i).getValue() / temp);
         }
-        Collections.swap(valuteItemList,0,position);
+        Collections.swap(valuteItemList, 0, position);
         getViewState().showData(valuteItemList);
+        getViewState().setActionBar(ValuteItem.getDate());
 
     }
 
     @Override
     public void onDestroy() {
-        if (disposable!=null){
+        if (disposable != null) {
             disposable.dispose();
         }
         super.onDestroy();

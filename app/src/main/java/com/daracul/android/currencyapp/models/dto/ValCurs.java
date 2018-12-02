@@ -13,7 +13,7 @@ public class ValCurs {
 
     @Attribute(name = "Date", required = false)
     private String date;
-    @Attribute(name = "name" , required = false)
+    @Attribute(name = "name", required = false)
     private String name;
 
 

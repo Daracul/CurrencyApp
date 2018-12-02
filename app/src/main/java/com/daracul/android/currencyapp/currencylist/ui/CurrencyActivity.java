@@ -1,12 +1,12 @@
 package com.daracul.android.currencyapp.currencylist.ui;
 
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -15,27 +15,17 @@ import com.daracul.android.currencyapp.common.MvpAppCompatActivity;
 import com.daracul.android.currencyapp.currencylist.ui.adapter.CurrencyAdapter;
 import com.daracul.android.currencyapp.currencylist.ui.mvp.CurrencyPresenter;
 import com.daracul.android.currencyapp.currencylist.ui.mvp.CurrencyView;
-import com.daracul.android.currencyapp.models.DataUtils;
 import com.daracul.android.currencyapp.models.ValuteItem;
-import com.daracul.android.currencyapp.models.dto.ValCurs;
-import com.daracul.android.currencyapp.models.dto.Valute;
 import com.daracul.android.currencyapp.network.RestApi;
 
-import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends MvpAppCompatActivity implements CurrencyView {
+public class CurrencyActivity extends MvpAppCompatActivity implements CurrencyView {
 
     private static final String LOG_TAG = "myLogs";
     @InjectPresenter
@@ -46,7 +36,7 @@ public class MainActivity extends MvpAppCompatActivity implements CurrencyView {
     private CurrencyAdapter adapter;
 
     @ProvidePresenter
-    CurrencyPresenter currencyPresenter(){
+    CurrencyPresenter currencyPresenter() {
         return new CurrencyPresenter(RestApi.getInstance());
     }
 
@@ -105,7 +95,6 @@ public class MainActivity extends MvpAppCompatActivity implements CurrencyView {
     }
 
 
-
     @Override
     public void showData(@NonNull List<ValuteItem> valuteItems) {
         progressBar.setVisibility(View.GONE);
@@ -120,5 +109,15 @@ public class MainActivity extends MvpAppCompatActivity implements CurrencyView {
         emptyTV.setText(R.string.error_message);
         emptyTV.setVisibility(View.VISIBLE);
 
+    }
+
+    @Override
+    public void setActionBar(@NonNull String date) {
+        androidx.appcompat.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            String statusBarText = getString(R.string.status_bar_text);
+            statusBarText = statusBarText + " " + date;
+            actionBar.setTitle(statusBarText);
+        }
     }
 }

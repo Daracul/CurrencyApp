@@ -1,4 +1,5 @@
 package com.daracul.android.currencyapp.common;
+
 import android.os.Bundle;
 
 import com.arellomobile.mvp.MvpDelegate;

@@ -2,10 +2,17 @@ package com.daracul.android.currencyapp.models;
 
 import com.daracul.android.currencyapp.R;
 
+import java.util.List;
+
+import androidx.annotation.NonNull;
+
 public class DataUtils {
-    public static int getPictureByValuteCode(String valuteCode){
-        int pictureId=0;
-        switch (valuteCode){
+    private static final String RUB_CODE = "RUB";
+    private static final String RUB = "Российский рубль";
+
+    public static int getPictureByValuteCode(String valuteCode) {
+        int pictureId = 0;
+        switch (valuteCode) {
             case "RUB":
                 pictureId = R.drawable.ru;
                 break;
@@ -111,12 +118,33 @@ public class DataUtils {
             case "JPY":
                 pictureId = R.drawable.jp;
                 break;
+            default:
+                pictureId = R.drawable.valute;
+                break;
 
         }
         return pictureId;
     }
 
-    public static float convertValueToFloat (String floatString){
-        return Float.parseFloat(floatString.replace(',','.'));
+    public static float convertValueToFloat(String floatString) {
+        return Float.parseFloat(floatString.replace(',', '.'));
+    }
+
+    public static int findUSAPosition(List<ValuteItem> valuteItems) {
+        for (int i = 0; i < valuteItems.size(); i++) {
+            if (valuteItems.get(i).getValuteCode().equals("USA")) return i;
+        }
+        return 0;
+    }
+
+    public static ValuteItem createRouble() {
+        return new ValuteItem(1.0f, 1, RUB_CODE, makeFirstLetterWithLowerCase(RUB));
+    }
+
+    public static String makeFirstLetterWithLowerCase(@NonNull String valuteName) {
+        if (!Character.isLowerCase(valuteName.charAt(1))) {
+            return valuteName;
+        }
+        return valuteName.substring(0, 1).toLowerCase() + valuteName.substring(1);
     }
 }

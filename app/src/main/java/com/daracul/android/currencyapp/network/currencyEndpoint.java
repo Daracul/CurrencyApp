@@ -6,7 +6,7 @@ import io.reactivex.Single;
 import retrofit2.http.GET;
 
 
-public interface currencyEndpoint {
+public interface CurrencyEndpoint {
     @GET("daily.xml")
     Single<ValCurs> currencyObject();
 
