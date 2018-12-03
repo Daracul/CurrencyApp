@@ -1,5 +1,6 @@
 package com.daracul.android.currencyapp.currencylist.ui.mvp;
 
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.daracul.android.currencyapp.models.CurrencyMapper;
