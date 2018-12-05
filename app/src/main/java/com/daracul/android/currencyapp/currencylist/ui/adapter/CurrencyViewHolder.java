@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.daracul.android.currencyapp.R;
 import com.daracul.android.currencyapp.models.ValuteItem;
+import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
 
@@ -44,7 +45,12 @@ public class CurrencyViewHolder extends RecyclerView.ViewHolder {
 
     public void bindItem(@NonNull ValuteItem valuteItem, final CurrencyAdapter.OnItemClickListener currencyClickListener) {
         valuteCode.setText(valuteItem.getValuteCode());
-        valuteFlag.setImageResource(valuteItem.getFlagPicture());
+//        valuteFlag.setImageResource(valuteItem.getFlagPicture());
+        Picasso.get()
+                .load(valuteItem.getFlagPicture())
+                .placeholder(R.drawable.valute)
+                .error(R.drawable.valute)
+                .into(valuteFlag);
         String valuteWithNominal = valuteItem.getNominal() + " " + valuteItem.getName();
         valuteName.setText(valuteWithNominal);
         String formattedValue = String.format(Locale.getDefault(), "%.3f", valuteItem.getValue());

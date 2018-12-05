@@ -147,4 +147,8 @@ public class DataUtils {
         }
         return valuteName.substring(0, 1).toLowerCase() + valuteName.substring(1);
     }
+
+    public static String getPictureUrl(String valuteCode){
+        return String.format("https://www.countryflags.io/%s/shiny/64.png",valuteCode.substring(0,2));
+    }
 }

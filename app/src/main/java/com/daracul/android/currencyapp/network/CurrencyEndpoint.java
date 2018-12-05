@@ -7,7 +7,7 @@ import retrofit2.http.GET;
 
 
 public interface CurrencyEndpoint {
-    @GET("daily.xml")
+    @GET("XML_daily.asp")
     Single<ValCurs> currencyObject();
 
 }

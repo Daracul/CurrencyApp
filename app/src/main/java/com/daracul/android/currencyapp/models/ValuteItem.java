@@ -5,7 +5,7 @@ public class ValuteItem {
     private int nominal;
     private String valuteCode;
     private String name;
-    private int flagPicture;
+    private String flagPicture;
     private static String date;
 
     public ValuteItem(float value, int nominal, String valuteCode, String name) {
@@ -13,7 +13,7 @@ public class ValuteItem {
         this.nominal = nominal;
         this.valuteCode = valuteCode;
         this.name = name;
-        this.flagPicture = DataUtils.getPictureByValuteCode(valuteCode);
+        this.flagPicture = DataUtils.getPictureUrl(valuteCode);
     }
 
     public float getValue() {
@@ -48,11 +48,11 @@ public class ValuteItem {
         this.name = name;
     }
 
-    public int getFlagPicture() {
+    public String getFlagPicture() {
         return flagPicture;
     }
 
-    public void setFlagPicture(int flagPicture) {
+    public void setFlagPicture(String flagPicture) {
         this.flagPicture = flagPicture;
     }
 

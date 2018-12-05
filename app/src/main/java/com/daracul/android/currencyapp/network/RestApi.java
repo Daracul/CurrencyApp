@@ -18,7 +18,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public final class RestApi {
-    private static final String URL = "https://www.cbr-xml-daily.ru/";
+    private static final String URL = "https://www.cbr.ru/scripts/";
     private static final int TIMEOUT_IN_SECONDS = 2;
 
     private static RestApi sRestApi;
